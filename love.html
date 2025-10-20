@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>💖 Món quà 20/10 💐</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* CĂN CHỈNH CHO MOBILE/ANDROID */
+html {
+    /* Đảm bảo chiều cao đầy đủ cho root */
+    height: 100%;
+}
+body {
+    margin: 0;
+    padding: 0;
+    /* Dùng min-height 100% thay vì 100vh để tránh lỗi thanh địa chỉ trên mobile */
+    min-height: 100vh;
+    height: 100%; /* Đã thay đổi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    font-family: 'Quicksand', sans-serif; 
+    font-weight: 400; 
+    text-align: center;
+    overflow-x: hidden; /* Tránh thanh cuộn ngang */
+    position: relative;
+    perspective: 1000px;
+    transition: opacity 700ms ease-in, transform 700ms ease-in;
+    opacity: 0;
+    transform: scale(0.95);
+    will-change: opacity, transform; 
+}
+body.fade-in {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Ô nhập tên */
+#name-input-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    opacity: 1;
+    transform: translateY(0);
+    z-index: 10;
+}
+#name-input-container.fade-out-name {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+#input-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+#name-input-container input {
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 2px solid #ff69b4;
+    font-size: 17px; 
+    font-family: 'Quicksand', sans-serif;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+#name-input-container input:focus {
+    outline: none;
+    border-color: #ff1493;
+    box-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+    transform: scale(1.01);
+}
+
+/* Nút “Nhận quà” */
+#name-input-container button {
+    background-color: #ff69b4;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    width: 200px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    padding: 10px 15px;
+    font-size: 17px; 
+    font-family: 'Quicksand', sans-serif;
+    box-shadow: 0 0 15px rgba(255,105,180,0.7);
+    animation: pinkPulse 1.5s infinite alternate ease-in-out,
+                softShake 4s infinite ease-in-out;
+    transition: all 0.3s ease;
+}
+#name-input-container button:hover {
+    background-color: #ff1493;
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(255,20,147,0.8);
+}
+
+@keyframes pinkPulse {
+    0% { box-shadow: 0 0 10px rgba(255,105,180,0.4); }
+    100% { box-shadow: 0 0 25px rgba(255,20,147,0.9); }
+}
+
+@keyframes softShake {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, -1px); }
+    75% { transform: translate(-1px, -1px); }
+}
+
+/* Hộp quà */
+#gift-box {
+    width: 280px;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.7s ease-in-out;
+    display: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    z-index: 5;
+}
+#gift-box.fade-in-gift {
+    opacity: 1;
+    transform: scale(1);
+    animation: pulse 2s infinite ease-in-out;
+}
+@keyframes pulse {
+    0%{transform:scale(1);}
+    50%{transform:scale(1.05);}
+    100%{transform:scale(1);}
+}
+
+/* Gợi ý nhấn hộp quà */
+#note {
+    margin-top: 20px;
+    font-size: 18px; 
+    color: #b80050;
+    font-weight: 700; 
+    text-shadow: 0 0 6px rgba(255,105,180,0.6);
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    z-index: 5;
+}
+#gift-box.fade-in-gift + #note {
+    opacity: 1;
+}
+
+/* THIỆP */
+#card {
+    display: none;
+    background: #fffafc;
+    border-radius: 25px;
+    border: 10px solid #f8bbd0;
+    box-shadow: 0 0 25px rgba(255,105,180,0.4);
+    padding: 35px 25px;
+    width: 80%;
+    max-width: 550px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.9) rotateY(30deg);
+    position: relative;
+    z-index: 10;
+    margin: 20px auto;
+}
+#card.show {
+    display: block;
+    animation: cardSlideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+@keyframes cardSlideIn {
+    from { transform: translateY(30px) scale(0.8) rotateY(-90deg); opacity: 0; }
+    to { transform: translateY(0) scale(1) rotateY(0deg); opacity: 1; }
+}
+
+#card h1 {
+    color: #b80050;
+    font-family: 'Playfair Display', serif;
+    text-shadow: 1px 1px 5px rgba(255,192,203, 0.5); 
+    font-size: 38px;
+    margin: 10px 0 15px 0;
+}
+
+/* GIF DỄ THƯƠNG */
+.gif-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 20px 0;
+    animation: fadeInGif 1.5s ease-in-out forwards;
+}
+.card-gif {
+    width: 120px;
+    height: auto;
+    border-radius: 25px;
+    border: 3px solid #ffc0cb; 
+    box-shadow: 0 0 15px rgba(255,105,180,0.6);
+    animation: gifFloat 3s ease-in-out infinite;
+}
+@keyframes gifFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+@keyframes fadeInGif {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#card p {
+    font-size: 17px; 
+    color: #333;
+    line-height: 1.7;
+    width: 90%;
+    margin: 0 auto;
+    text-align: left;
+    font-family: 'Merriweather', serif; 
+}
+#card p strong { 
+    color: #b80050; 
+    font-weight: 700; 
+    font-family: 'Merriweather', serif; 
+}
+
+.line { 
+    display: block; 
+    margin-bottom: 12px; 
+    min-height: 18px; 
+}
+
+/* HIỆU ỨNG TEXT GLOW CHO CHỮ KÝ */
+.signature {
+    margin-top: 25px;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; 
+    color: #b80050;
+    animation: textGlow 2s infinite alternate ease-in-out;
+}
+@keyframes textGlow {
+    0% { text-shadow: 0 0 8px rgba(255, 105, 180, 0.7); }
+    100% { text-shadow: 0 0 15px rgba(255, 51, 133, 0.9), 0 0 30px rgba(255, 150, 200, 0.5); }
+}
+
+
+/* Trang trí */
+.deco-flower {
+    position: absolute;
+    font-size: 25px;
+    color: #ff80ab;
+    opacity: 0;
+    animation: decoAppear 2s ease-out forwards;
+}
+@keyframes decoAppear {
+    0%{opacity:0;transform:scale(0.5) rotate(0deg);}
+    100%{opacity:1;transform:scale(1) rotate(10deg);}
+}
+#deco-tl{top:10px;left:10px;}
+#deco-tr{top:10px;right:10px;}
+#deco-bl{bottom:10px;left:10px;}
+#deco-br{bottom:10px;right:10px;}
+
+
+/* CHỈ GIỮ LẠI: HIỆU ỨNG TRÁI TIM RƠI TỪ TRÊN XUỐNG (Nền) */
+.heart-fall {
+    position: absolute;
+    font-size: 25px;
+    color: #ff3385;
+    opacity: 0;
+    animation: heartFall 8s linear infinite; 
+    pointer-events: none;
+    z-index: 0;
+    text-shadow: 0 0 5px rgba(255,51,133,0.5);
+    will-change: transform, opacity; 
+}
+
+@keyframes heartFall {
+    0% {
+        transform: translate3d(var(--x, 0px), -10vh, 0) scale(0.5);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate3d(var(--x, 0px), 100vh, 0) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* HIỆU ỨNG TRÁI TIM BẬT LÊN KHI CLICK (ĐA MÀU) */
+.click-heart {
+    position: fixed; 
+    font-size: 30px;
+    animation: popUpHeart 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 101; 
+    user-select: none;
+    transform: translate(-50%, -50%); 
+    will-change: transform, opacity;
+}
+
+/* Định nghĩa màu sắc cho trái tim click */
+.click-heart.pink { color: #ff1493; text-shadow: 0 0 8px rgba(255,20,147,0.7); }
+.click-heart.red { color: #e91e63; text-shadow: 0 0 8px rgba(233,30,99,0.7); }
+.click-heart.purple { color: #9c27b0; text-shadow: 0 0 8px rgba(156,39,176,0.7); }
+.click-heart.orange { color: #ff9800; text-shadow: 0 0 8px rgba(255,152,0,0.7); }
+.click-heart.yellow { color: #ffeb3b; text-shadow: 0 0 8px rgba(255,235,59,0.7); }
+
+@keyframes popUpHeart {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    50% {
+        transform: translate3d(-50%, -100%, 0) scale(1.2); 
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate3d(-50%, -200%, 0) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Mobile */
+@media (max-width:600px) {
+    #card { padding: 25px 15px; width: 95%; border-width: 8px; }
+    #card h1 { font-size: 32px; } 
+    #card p { 
+        font-size: 15px; 
+    }
+    #card p strong { font-weight: 700; }
+    .signature { font-size: 20px; }
+    .card-gif { width: 100px; }
+    #note { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+    <source src="background_music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="open-sound">
+    <source src="gift_open_sound.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<div id="name-input-container">
+    <div id="input-wrapper">
+        <input type="text" id="recipient-name" placeholder="Nhập tên">
+    </div>
+    <button id="start-btn">🎁 Nhận quà</button>
+</div>
+
+<img id="gift-box" src="1.jpg" alt="Hộp quà">
+<div id="note">💬 Nhấn vào hộp quà để mở nhé 💖</div>
+
+<div id="card">
+    <div class="deco-flower" id="deco-tl">🌸</div>
+    <div class="deco-flower" id="deco-tr">🌸</div>
+    <div class="deco-flower" id="deco-bl">🌸</div>
+    <div class="deco-flower" id="deco-br">🌸</div>
+
+    <h1>🌷💖 Chúc Mừng 20/10 💐🌸</h1>
+
+    <div class="gif-container">
+        <img src="giphyabc.gif" alt="Ảnh gif dễ thương" class="card-gif">
+    </div>
+
+    <p>
+        <span class="line" data-text="Kính gửi Cô giáo **[name]** đáng kính!"></span>
+        <span class="line" data-text="Tặng những đóa hoa tươi thắm nhất cho người Mẹ thứ hai của chúng em! 💐🌷"></span>
+        <span class="line" data-text="🌹 Nhân ngày Phụ nữ Việt Nam 20/10, xin gửi lời tri ân sâu sắc nhất tới Cô **[name]**."></span>
+        <span class="line" data-text="🌸 Kính chúc Cô **[name]** luôn mạnh khỏe, hạnh phúc, trẻ trung và mãi là người truyền lửa tri thức. 🌸"></span>
+        <span class="line" data-text="✨ Cảm ơn Cô vì những bài học quý giá, sự tận tâm và tình yêu thương dành cho tập thể 12A11. ✨"></span>
+        <span class="line" data-text="💖 Mong Cô luôn giữ mãi nụ cười rạng rỡ trên bục giảng và trong cuộc sống."></span>
+        <span class="line" data-text="🎁 Chúc Cô có một ngày lễ thật vui và ấm áp bên gia đình và những người thân yêu!"></span>
+        <span class="line" data-text="💕 Chúng em hứa sẽ cố gắng học tập thật tốt để không phụ lòng mong mỏi của Cô."></span>
+        <span class="line" data-text="💐 Chúc mừng Cô **[name]**! Cô mãi là niềm tự hào của chúng em! 💐"></span>
+    </p>
+
+    <div class="signature">Tập thể học sinh 12A11 kính tặng</div>
+</div>
+
+<script>
+const giftBox = document.getElementById('gift-box');
+const card = document.getElementById('card');
+const note = document.getElementById('note');
+const lines = Array.from(document.querySelectorAll('.line')).filter(el => el.hasAttribute('data-text'));
+const nameInputContainer = document.getElementById('name-input-container');
+const recipientNameInput = document.getElementById('recipient-name');
+const startBtn = document.getElementById('start-btn');
+const bgMusic = document.getElementById('bg-music');
+const openSound = document.getElementById('open-sound');
+const heartColors = ['pink', 'red', 'purple', 'orange', 'yellow']; 
+
+// Tối ưu hóa: Giới hạn tốc độ tạo trái tim khi click
+let lastClickTime = 0;
+const clickThrottle = 100; // 100ms: Chỉ cho phép tạo 1 trái tim mỗi 100ms
+
+// Hiệu ứng gõ chữ, giữ nguyên <strong>
+function typeLine(element, htmlText, delay = 55) { 
+    return new Promise(resolve => {
+        element.innerHTML = '';
+        const temp = document.createElement('div');
+        temp.innerHTML = htmlText;
+        const nodes = Array.from(temp.childNodes); 
+
+        function typeNode(index = 0, charIndex = 0) {
+            if (index >= nodes.length) {
+                resolve();
+                return;
+            }
+
+            const node = nodes[index];
+            if (node.nodeType === Node.TEXT_NODE) {
+                element.innerHTML += node.textContent.charAt(charIndex);
+                charIndex++;
+                if (charIndex < node.textContent.length) {
+                    const nextDelay = (node.textContent.charAt(charIndex-1).match(/[.!?]/)) ? delay*8 : delay;
+                    setTimeout(() => typeNode(index, charIndex), nextDelay);
+                } else {
+                    typeNode(index + 1, 0);
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'STRONG') {
+                const strongEl = document.createElement('strong');
+                element.appendChild(strongEl);
+                function typeStrong(charIdx = 0) {
+                    strongEl.textContent += node.textContent.charAt(charIdx);
+                    charIdx++;
+                    if (charIdx < node.textContent.length) {
+                        const nextDelay = (node.textContent.charAt(charIdx-1).match(/[.!?]/)) ? delay*8 : delay;
+                        setTimeout(() => typeStrong(charIdx), nextDelay);
+                    } else {
+                        typeNode(index + 1, 0);
+                    }
+                }
+                typeStrong();
+            }
+        }
+
+        typeNode();
+    });
+}
+
+// Trái tim click
+function createClickHeart(x, y) {
+    const heart = document.createElement('span');
+    heart.classList.add('click-heart');
+    const randomColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+    heart.classList.add(randomColor);
+    heart.innerHTML = '💖';
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    document.body.appendChild(heart);
+    heart.addEventListener('animationend', () => heart.remove());
+}
+
+// Tối ưu hóa: Hàm Rung (Haptic Feedback) cho di động
+function triggerHapticFeedback() {
+    if (navigator.vibrate) {
+        navigator.vibrate(50); 
+    }
+}
+
+// Nút Nhận quà
+function handleStartButtonClick(event) {
+    const name = recipientNameInput.value.trim().replace(/[<>]/g, "");
+    if (!name) {
+        alert("Vui lòng nhập tên người nhận! 💖");
+        if (event.clientX && event.clientY) createClickHeart(event.clientX, event.clientY);
+        else if (event.touches) createClickHeart(event.touches[0].clientX, event.touches[0].clientY);
+        return;
+    }
+    
+    triggerHapticFeedback(); 
+
+    // Hiệu ứng trái tim
+    const rect = startBtn.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    [0, 100, 200].forEach(t => setTimeout(() => createClickHeart(centerX, centerY), t));
+
+    // Thay [name] bằng tên người nhập
+    lines.forEach(line => {
+        let content = line.getAttribute('data-text');
+        content = content.replace(/\*\*\[name\]\*\*/g, `**${name}**`).replace(/\[name\]/g, `**${name}**`);
+        line.setAttribute('data-text', content);
+        line.innerHTML = '';
+    });
+
+    nameInputContainer.classList.add("fade-out-name");
+    if (bgMusic.paused) bgMusic.play().catch(() => {});
+    setTimeout(() => {
+        nameInputContainer.style.display = "none";
+        giftBox.style.display = "block";
+        setTimeout(() => giftBox.classList.add("fade-in-gift"), 10);
+        note.textContent = `💬 Nhấn vào hộp quà để mở, ${name} 💖`;
+    }, 500);
+}
+
+// Hiển thị thiệp và gõ chữ
+async function showCardContent() {
+    for (const line of lines) {
+        const htmlText = line.getAttribute('data-text').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        await typeLine(line, htmlText); 
+        await new Promise(resolve => setTimeout(resolve, 600));
+    }
+}
+
+startBtn.addEventListener('click', handleStartButtonClick);
+startBtn.addEventListener('touchstart', handleStartButtonClick);
+
+
+// Tối ưu hóa: Thêm Throttle (giới hạn tốc độ) cho hiệu ứng trái tim click
+document.addEventListener('click', e => {
+    const now = Date.now();
+    if (e.target !== startBtn && e.target !== giftBox && e.target !== recipientNameInput && now - lastClickTime > clickThrottle) {
+        createClickHeart(e.clientX, e.clientY);
+        lastClickTime = now;
+    }
+});
+
+// Tối ưu hóa Touch Event (Chạm)
+document.addEventListener('touchstart', e => {
+    if (e.target !== startBtn && e.target !== giftBox && e.target !== recipientNameInput) {
+        triggerHapticFeedback(); 
+    }
+    
+    const now = Date.now();
+    if (e.target !== startBtn && e.target !== giftBox && e.target !== recipientNameInput && now - lastClickTime > clickThrottle) {
+        createClickHeart(e.touches[0].clientX, e.touches[0].clientY);
+        lastClickTime = now;
+    }
+}, { passive: true }); 
+
+// Heart Rain: Tạo số lượng cố định
+function createInitialHearts(count) {
+    for(let i = 0; i < count; i++) {
+        const heart = document.createElement('span');
+        heart.classList.add('heart-fall');
+        heart.innerHTML = '❤️';
+        heart.style.left = `${Math.random() * window.innerWidth}px`; 
+        heart.style.animationDelay = `${-Math.random() * 6}s`; 
+        heart.style.animationDuration = `${8 + Math.random() * 4}s`; 
+        heart.style.setProperty('--x', `${(Math.random() - 0.5) * 150}px`); 
+        document.body.appendChild(heart);
+    }
+}
+
+function startHeartRain() {
+    createInitialHearts(20); 
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('fade-in');
+    document.body.addEventListener('click', () => {
+        if (bgMusic.paused) bgMusic.play().catch(() => {});
+    }, { once: true });
+    startHeartRain(); 
+});
+
+giftBox.addEventListener('click', () => {
+    triggerHapticFeedback(); 
+    
+    note.style.display = "none";
+    giftBox.src = "2.png";
+    giftBox.style.cursor = "default";
+    openSound.play().catch(() => {});
+    setTimeout(() => {
+        giftBox.style.display = "none";
+        card.classList.add("show");
+        showCardContent();
+    }, 800);
+});
+</script>
+
+</body>
+</html>
